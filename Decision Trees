@@ -1,0 +1,133 @@
+**# DECISION TREES**
+
+#********************************************LOGISTIC REGRESSION*********************************#
+#load data
+train <- read.csv('Train_Old.csv')
+
+#create training and validation data from given data
+install.packages('caTools')
+library(caTools)
+
+set.seed(88)
+split <- sample.split(train$Recommended, SplitRatio = 0.75)
+
+#get training and test data
+dresstrain <- subset(train, split == TRUE)
+dresstest <- subset(train, split == FALSE)
+
+#logistic regression model
+model <- glm (Recommended ~ .-ID, data = dresstrain, family = binomial)
+summary(model)
+predict <- predict(model, type = 'response')
+#confusion matrix
+table(dresstrain$Recommended, predict > 0.5)
+
+#*************************************************************************************************
+
+                           # Non-Linear Classification in R with Decision Trees
+
+#**************************************************CART*******************************************
+# load the package
+library(rpart)
+# load data
+data(iris)
+# fit model
+fit <- rpart(Species~., data=iris)
+# summarize the fit
+summary(fit)
+# make predictions
+predictions <- predict(fit, iris[,1:4], type="class")
+# summarize accuracy
+table(predictions, iris$Species)
+
+#**************************************************C4.5********************************************
+# load the package
+library(RWeka)
+# load data
+data(iris)
+# fit model
+fit <- J48(Species~., data=iris)
+# summarize the fit
+summary(fit)
+# make predictions
+predictions <- predict(fit, iris[,1:4])
+# summarize accuracy
+table(predictions, iris$Species)
+
+#**************************************************PART********************************************
+# load the package
+library(RWeka)
+# load data
+data(iris)
+# fit model
+fit <- PART(Species~., data=iris)
+# summarize the fit
+summary(fit)
+# make predictions
+predictions <- predict(fit, iris[,1:4])
+# summarize accuracy
+table(predictions, iris$Species)
+
+#***********************************************Bagging CART***************************************
+# load the package
+library(ipred)
+# load data
+data(iris)
+# fit model
+fit <- bagging(Species~., data=iris)
+# summarize the fit
+summary(fit)
+# make predictions
+predictions <- predict(fit, iris[,1:4], type="class")
+# summarize accuracy
+table(predictions, iris$Species)
+
+#**********************************************Random Forest***************************************
+# load the package
+library(randomForest)
+# load data
+data(iris)
+# fit model
+fit <- randomForest(Species~., data=iris)
+# summarize the fit
+summary(fit)
+# make predictions
+predictions <- predict(fit, iris[,1:4])
+# summarize accuracy
+table(predictions, iris$Species)
+
+#**************************************************GBM********************************************
+# load the package
+library(gbm)
+# load data
+data(iris)
+# fit model
+fit <- gbm(Product~., data=dfpred, distribution="multinomial")
+# summarize the fit
+print(fit)
+# make predictions
+predictions <- predict(fit, dfpred)
+# summarize accuracy
+table(predictions, iris$Species)
+
+#*********************************************Boosted C5.0****************************************
+# load the package
+library(C50)
+# load data
+data(iris)
+# fit model
+fit <- C5.0(Species~., data=iris, trials=10)
+# summarize the fit
+print(fit)
+# make predictions
+predictions <- predict(fit, iris)
+# summarize accuracy
+table(predictions, iris$Species)
+#*********************************************Naive Bayes******************************************
+library(mlbench)
+model <- naiveBayes(class ~ ., data = breast_cancer)
+class(model)
+summary(model)
+print(model)
+preds <- predict(model, newdata = breast_cancer)
+conf_matrix <- table(preds, breast_cancer$class)
